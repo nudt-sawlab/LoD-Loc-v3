@@ -22,7 +22,7 @@ cd "C:\Users\27490\Desktop\kaiyuan\LoD-Loc v3"
 你要确认这里面主要是这些内容：
 
 - 代码目录：`config/`、`gloc/`、`gloc_roma/`、`lib/`、`utils/`
-- 文档文件：`README.md`、`OPEN_SOURCE_GUIDE_CN.md`
+- 文档文件：`README.md`、`README_CN.md`、`OPEN_SOURCE_GUIDE_CN.md`
 - 入口脚本：`refine_blender_Japan_07.sh`
 - 配置和依赖：`requirements.txt`、`configs.py`、`parse_args.py` 等
 
@@ -98,9 +98,9 @@ git config --global user.email "你的GitHub邮箱"
 
 因为这台机器上没有安装 `gh` 命令行工具，所以最稳的方式是你在浏览器里手动创建一个空仓库。
 
-建议仓库名：
+你已经提供了仓库地址：
 
-- `LoD-Loc-v3`
+- `https://github.com/pppppsb/LoD-Locv3`
 
 注意事项：
 
@@ -112,16 +112,17 @@ git config --global user.email "你的GitHub邮箱"
 
 ## 第七步：绑定远程仓库
 
-在 GitHub 创建空仓库后，复制它给你的 HTTPS 地址，例如：
-
-```text
-https://github.com/你的用户名/LoD-Loc-v3.git
-```
-
-然后在本地执行：
+在本地执行：
 
 ```powershell
-git remote add origin https://github.com/你的用户名/LoD-Loc-v3.git
+git remote add origin https://github.com/pppppsb/LoD-Locv3.git
+git push -u origin main
+```
+
+如果远程已经存在，就执行：
+
+```powershell
+git remote set-url origin https://github.com/pppppsb/LoD-Locv3.git
 git push -u origin main
 ```
 
@@ -138,7 +139,27 @@ git push -u origin main
 3. 需要 Personal Access Token
   说明：去 GitHub 设置里创建 Token，再作为密码使用
 
-## 第九步：上传完成后检查
+## 第九步：用 GitHub Releases 上传大资源
+
+因为 `data/`、`Ins_data/`、`model/` 不适合直接进入 Git 仓库，所以建议你从 `LoD-Loc v3_all` 中分别打包：
+
+```text
+data.zip
+Ins_data.zip
+model.zip
+```
+
+然后在 GitHub 仓库页面执行：
+
+1. 点击 `Releases`
+2. 点击 `Draft a new release`
+3. 选择一个版本号，例如 `v1.0.0`
+4. 上传 `data.zip`、`Ins_data.zip`、`model.zip`
+5. 在 Release 说明里写清楚：
+   - 每个压缩包应该解压到仓库中的哪个路径
+   - 哪个实验入口依赖这些资源
+
+## 第十步：上传完成后检查
 
 上传成功后，你到 GitHub 仓库首页检查下面几项：
 
@@ -148,7 +169,7 @@ git push -u origin main
 4. `refine_blender_Japan_07.sh` 是否还在
 5. `config/config_RealTime_render_1_Japan_07.json` 是否已经是公开版路径
 
-## 第十步：后续如何维护
+## 第十一步：后续如何维护
 
 以后你继续做实验时：
 
@@ -163,6 +184,6 @@ git push -u origin main
 我可以继续帮你做下面两件事中的任意一件：
 
 1. 直接在 `LoD-Loc v3` 里补一个 `LICENSE`
-2. 直接在 `LoD-Loc v3` 里初始化 Git，并把第一次提交也做掉
+2. 直接帮你把当前代码推到 `https://github.com/pppppsb/LoD-Locv3.git`
 
-如果你愿意继续，我下一步建议先做第 1 件，再做第 2 件。
+如果本机 GitHub 凭证有效，我可以直接继续做第 2 件。

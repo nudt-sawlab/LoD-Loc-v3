@@ -18,9 +18,9 @@
   <h2 align="center">CVPR 2026</h2>
 
   <h3 align="center">
-    <a href="https://pppppsb.github.io/LoD-Locv3/">Project Page</a>
-    | <a href="README_CN.md">Chinese README</a>
-    | <a href="https://github.com/pppppsb/LoD-Locv3/releases">Releases</a>
+    <a href="https://nudt-sawlab.github.io/LoD-Locv3/">Project Page</a>
+    | <a href="https://arxiv.org/pdf/2603.19609">Paper</a>
+    | <a href="https://www.youtube.com/watch?v=pU2_JjncLPg">Demo</a>
   </h3>
   <div align="center"></div>
 </p>
@@ -34,7 +34,7 @@ This repository is an implementation of the paper "LoD-Loc v3: Generalized Aeria
 
 ## Important Things
 
-We highly appreciate the research community's interest in the LoD-Loc v2 project. Please note that the OSG rendering technique described in the paper involves project intellectual property constraints. Consequently, we have implemented a Blender-based rendering pipeline as a substitute in this codebase.
+We highly appreciate the research community's interest in the LoD-Loc v3 project. Please note that the OSG rendering technique described in the paper involves project intellectual property constraints. Consequently, we have implemented a Blender-based rendering pipeline as a substitute in this codebase.
 
 ## Overview
 
@@ -109,9 +109,9 @@ If this project helps your research, please cite:
 
 ```bibtex
 @article{peng2026lodlocv3,
-  title={LoD-Loc v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment},
-  author={Peng, Shuaibang and Zhu, Juelin and Li, Xia and Yan, Shen and Yang, Kun and Zhang, Maojun and Liu, Yu},
-  journal={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  title={{LoD-Loc} v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment},
+  author={Peng, Shuaibang and Zhu, Juelin and Li, Xia and Yang, Kun and Zhang, Maojun and Liu, Yu and Yan, Shen},
+  journal={arXiv preprint arXiv:2603.19609},
   year={2026}
 }
 ```

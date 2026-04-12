@@ -114,4 +114,4 @@ LoD-Loc v3 延续了 LoD-Loc / MC-Loc 的研究路线，并采用了 Blender 渲
 
 ## 许可证
 
-在真正公开 GitHub 仓库之前，建议补一个正式的 `LICENSE` 文件。对科研代码来说，`MIT` 是最常见也最省心的选择；如果你希望保留更明确的专利授权条款，可以选择 `Apache-2.0`。
+本仓库采用 MIT License，详细内容请见 `LICENSE` 文件。

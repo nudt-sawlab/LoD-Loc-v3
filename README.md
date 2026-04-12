@@ -110,4 +110,4 @@ If this project helps your research, please cite:
 
 ## License
 
-Before making the repository fully public, add a formal `LICENSE` file. For research code, `MIT` is usually the simplest choice; `Apache-2.0` is also a good option if you want explicit patent-related terms.
+This repository is released under the MIT License. See the `LICENSE` file for details.

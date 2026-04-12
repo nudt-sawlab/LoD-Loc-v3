@@ -17,9 +17,8 @@
 
 也就是说，代码仓库这一步已经完成了。你接下来要做的重点，不再是“上传代码”，而是：
 
-1. 补 `LICENSE`
-2. 用 GitHub Releases 分发 `data/`、`Ins_data/`、`model/`
-3. 检查仓库首页展示是否符合预期
+1. 用 GitHub Releases 分发 `data/`、`Ins_data/`、`model/`
+2. 检查仓库首页展示是否符合预期
 
 ## 第一步：检查 GitHub 仓库首页
 
@@ -35,18 +34,11 @@
 4. `refine_blender_Japan_07.sh` 还在
 5. `config/config_RealTime_render_1_Japan_07.json` 是公开版路径
 
-## 第二步：补许可证
+## 第二步：许可证状态
 
-当前仓库还没有正式的 `LICENSE` 文件。
+当前仓库已经补上了 MIT `LICENSE` 文件。
 
-推荐两个选择：
-
-- `MIT`
-- `Apache-2.0`
-
-如果你想省事、兼容性高，优先选 `MIT`。
-
-如果你愿意，我下一步可以直接帮你补 `LICENSE`，然后再次推送。
+如果你打开 GitHub 仓库首页后暂时没有看到 License 标记，通常刷新页面或等待 GitHub 索引一会儿就会显示。
 
 ## 第三步：从 `LoD-Loc v3_all` 打包大资源
 
@@ -121,5 +113,5 @@ Linux or WSL is recommended for reproduction.
 
 我可以继续帮你做下面两件事中的任意一件：
 
-1. 直接在 `LoD-Loc v3` 里补一个 `LICENSE`
+1. 帮你检查打包出来的 `data.zip`、`Ins_data.zip`、`model.zip` 是否完整
 2. 帮你再写一份 GitHub Release 的英文说明稿，方便你直接复制粘贴

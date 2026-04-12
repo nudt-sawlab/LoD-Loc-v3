@@ -2,20 +2,15 @@
 
 [Project Page](https://pppppsb.github.io/LoD-Locv3/) | [Chinese README](README_CN.md) | [Repository](https://github.com/pppppsb/LoD-Locv3)
 
-LoD-Loc v3 is a research codebase for aerial visual localization over low-detail city models. Compared with LoD-Loc v2, this version focuses on:
-
-- better cross-scene generalization
-- reducing pose ambiguity in dense urban regions through instance silhouette alignment
-
-This public repository is organized with `LoD-Loc-v2-main` as the reference style: code, configs, documentation, and figures stay in GitHub, while large local experiment assets are distributed separately.
+LoD-Loc v3 is a research codebase for aerial visual localization over low-detail city models, with a focus on cross-scene generalization and instance silhouette alignment in dense urban environments.
 
 ![LoD-Loc v3 teaser](assets/teaser.png)
 
 ## Overview
 
 - Main public entry: `refine_blender_Japan_07.sh`
-- This repository does not directly include large local experiment assets such as `data/`, `Ins_data/`, or `model/`
-- Full reproduction requires downloading those assets separately and placing them into the expected local paths
+- This repository contains code, configs, and documentation
+- Large experiment assets are distributed separately through [GitHub Releases](https://github.com/pppppsb/LoD-Locv3/releases)
 
 ## Repository Structure
 
@@ -24,7 +19,6 @@ This public repository is organized with `LoD-Loc-v2-main` as the reference styl
 - `assets/`: figures used by the README and project page
 - `refine_blender_Japan_07.sh`: public test entry
 - `README_CN.md`: Chinese project introduction
-- `OPEN_SOURCE_GUIDE_CN.md`: Chinese upload and release guide
 
 ## Environment
 
@@ -45,55 +39,39 @@ You will also need:
 
 By default, `config/config_RealTime_render_1_Japan_07.json` uses `blender` as the executable name. If Blender is not in your `PATH`, replace that field with the absolute path to your Blender executable.
 
-## Quick Test
+## Quick Start
 
-The recommended public entry is:
+1. Install the required environment and dependencies.
+2. Download `data.zip`, `Ins_data.zip`, and `model.zip` from [GitHub Releases](https://github.com/pppppsb/LoD-Locv3/releases).
+3. Extract them to the repository root so that `data/`, `Ins_data/`, and `model/` are created in place.
+4. Run:
 
 ```bash
 bash ./refine_blender_Japan_07.sh
 ```
 
-It runs:
+This entry script runs:
 
 - `refine_pose_realtime_area.py`
 - `refine_pose_realtime_score.py`
 
-## External Assets
+## Required External Assets
 
-The following assets are required for the `Japan_07` experiment but are intentionally not stored in the Git repository:
+The `Japan_07` experiment expects the following assets:
 
 - `data/UAVD4L-LoD/Japan_07/GPS_pose_new_all.txt`
 - `data/blender_origin_zero.xml`
 - `Ins_data/Japan_07/PT_640_360_09091800/conf_0.3`
 - `model/Japan/Japan_07/Tokeyo_Dingmu_viewpoints_topology_clustered.blend`
 
-These assets are intended to be distributed through GitHub Releases instead of normal Git history.
+These files are distributed through GitHub Releases instead of normal Git history.
 
-## GitHub Releases
+## Acknowledgments
 
-The large experiment assets should be published as release attachments in this repository:
+Our implementation is mainly based on the following repositories. Thanks to their authors.
 
-- `data/`
-- `Ins_data/`
-- `model/`
-
-Recommended practice:
-
-1. Compress each asset group separately, for example `data.zip`, `Ins_data.zip`, and `model.zip`
-2. Create a GitHub Release for a tagged version of the code
-3. Upload the zip files as release assets
-4. Mention the expected extraction paths in the release notes
-
-This keeps the Git repository lightweight while still allowing full local reproduction.
-
-## Project Maintenance
-
-Recommended workflow:
-
-1. Keep `LoD-Loc v3_all` as your full local experiment workspace
-2. Keep `LoD-Loc v3` as the public code repository
-3. Publish code changes from `LoD-Loc v3`
-4. Publish large assets through GitHub Releases
+- [LoD-Loc v2](https://github.com/VictorZoo/LoD-Loc-v2)
+- [RSPrompter](https://github.com/KyanChen/RSPrompter)
 
 ## Citation
 

@@ -15,7 +15,7 @@ os.environ["OPENCV_IO_ENABLE_OPENEXR"]="1"
 class QueryLocalizer:
     def __init__(self, config=None):
         self.config = config
-        # 初始化其他需要的成员变量
+
         self.dataset = config['render2loc']['datasets']
         self.render_camera = config['render2loc']['render_camera']
         self.query_camera =  config['render2loc']['query_camera']
@@ -137,24 +137,12 @@ class QueryLocalizer:
         return depth.cpu(), valid
 
     def get_query_intrinsic(self, camera):
-        """
-        计算35mm等效焦距和内参矩阵。
-        
-        参数:
-        image_width_px -- 图像的宽度（像素）
-        image_height_px -- 图像的高度（像素）
-        sensor_width_mm -- 相机传感器的宽度（毫米）
-        sensor_height_mm -- 相机传感器的高度（毫米）
-        
-        返回:
-        K -- 内参矩阵，形状为3x3
-        """
         image_width_px, image_height_px, f_mm, cx, cy = camera
-        # 计算内参矩阵中的焦距和主点坐标
+
         fx = f_mm
         fy = f_mm
         
-        # 构建内参矩阵 K
+
         K = [[fx, 0, cx],
             [0, fy, cy],
             [0, 0, 1]]
@@ -162,30 +150,18 @@ class QueryLocalizer:
         return K
     
     def get_intrinsic(self, camera):
-        """
-        计算35mm等效焦距和内参矩阵。
-        
-        参数:
-        image_width_px -- 图像的宽度（像素）
-        image_height_px -- 图像的高度（像素）
-        sensor_width_mm -- 相机传感器的宽度（毫米）
-        sensor_height_mm -- 相机传感器的高度（毫米）
-        
-        返回:
-        K -- 内参矩阵，形状为3x3
-        """
         image_width_px, image_height_px, sensor_width_mm, sensor_height_mm, f_mm = camera
-        # 计算焦距在x和y方向上的比率
+
         focal_ratio_x = f_mm / sensor_width_mm
         focal_ratio_y = f_mm / sensor_height_mm
         
-        # 计算内参矩阵中的焦距和主点坐标
+
         fx = image_width_px * focal_ratio_x
         fy = image_height_px * focal_ratio_y
         cx = image_width_px / 2
         cy = image_height_px / 2
         
-        # 构建内参矩阵 K
+
         K = [[fx, 0, cx],
             [0, fy, cy],
             [0, 0, 1]]

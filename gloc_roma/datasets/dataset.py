@@ -268,9 +268,9 @@ class RenderedImagesDataset(data.Dataset):
                 fields = line.split(' ')
                 
                 name = fields[0]+'.png'
-                # tvec = np.array(tuple(map(float, fields[1:4]))) #写反了
+
                 # qvec = np.array(tuple(map(float, fields[4:8])))
-                qvec = np.array(tuple(map(float, fields[1:5]))) #改
+                qvec = np.array(tuple(map(float, fields[1:5])))
                 tvec = np.array(tuple(map(float, fields[5:8])))
                 im = RImage(id=-1, qvec=qvec, tvec=tvec, name=name, 
                             camera_id='', xys={}, point3D_ids={})

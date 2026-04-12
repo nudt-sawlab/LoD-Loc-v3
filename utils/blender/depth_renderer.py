@@ -142,10 +142,10 @@ def prepare_world(image_save_path, depth_name):
     # bpy.context.scene.render.image_settings.color_depth = '16'
     # bpy.context.scene.render.image_settings.color_mode = 'RGB'
 
-    # 必须设置，否则无法输出深度
+
     
 
-    # 必须设置，否则无法输出法向
+
     # bpy.context.view_layer.use_pass_normal = True 
 
     # Clear default nodes
@@ -163,7 +163,7 @@ def prepare_world(image_save_path, depth_name):
     for output_node in [depth_file_output]: #image_file_output
         output_node.base_path = ''
 
-    # 输出路径            
+
     scene.render.filepath = image_save_path 
     depth_file_output.file_slots[0].path = f"{image_save_path}/{depth_name}"
     bpy.ops.render.render(write_still=True)

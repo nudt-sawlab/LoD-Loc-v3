@@ -58,21 +58,14 @@ def get_query_features(model, dataset, feat_level, bs=1):
             images = images['im'].cuda()    
 
             descr = model(images)   
-            descr = descr[feat_level].cpu().numpy()  # 取Path1(即分辨率最高的一級)
+            descr = descr[feat_level].cpu().numpy()
             descriptors.append(descr)
 
     return descriptors
 
 def get_query_mask(dataset, bs=1):
-    """
-    Separate function for the queries as they might have different
-    resolutions; thus it does not use a matrix to store descriptors
-    but a list of arrays
-    单独为查询集设计的函数，因为查询图片可能分辨率不同，
-    所以不使用统一的矩阵存储描述符，而是用数组列表。
-    """
     # bs = 1 as resolution might differ
-    # bs = 1，因为分辨率可能不同，不能批量堆叠，但是可以多线程加载图片
+
     dataloader = DataLoader(dataset=dataset, num_workers=8, batch_size=bs)
 
     images_list = []
@@ -86,15 +79,15 @@ def get_query_mask(dataset, bs=1):
         #   [0.0000, 0.0000, 0.0000,  ..., 0.0039, 0.0039, 0.0039],
         #   [0.0000, 0.0000, 0.0000,  ..., 0.0039, 0.0039, 0.0039]]]])}
 
-        # - 'im_ref' ：原始图片的元数据对象（包含文件名、位姿等）
-        # - 'im' ：经过 transform 处理后的图片张量（Tensor）  
-        images = batch['im'].cuda()  # 提取图像并将其移动到 GPU（如果需要）
-        if len(images.shape) == 4:# 如果是4维（批量、通道、高、宽），只取第一个通道
-            images = images[:,0, :, :]  # 选择第一个通道
-        # # 添加二值化处理
-        # images = (images > 0.5).float()  # 将大于0.5的值设为1，其他设为0
+
+
+        images = batch['im'].cuda()
+        if len(images.shape) == 4:
+            images = images[:,0, :, :]
+
+
         
-        images_list.append(images.squeeze())# 压缩多余维度后加入列表
+        images_list.append(images.squeeze())
 
     return images_list
 
@@ -119,12 +112,12 @@ def get_candidates_mask(dataset, descr_dim, bs=32):
     len_ds = len(dataset)
     # descr_dim = (360, 640)  # Japan_02_one_third
     # descr_dim = (1080, 1920)  # Japan_02
-    # descr_dim = (448, 602)  # 改 inTraj outTraj
-    descr_dim = (480, 720)  # 改 Swiss
-    # descr_dim = (480, 270)  # 改 Video
+
+    descr_dim = (480, 720)
+
     
     # descriptors = np.empty((len_ds, *descr_dim), dtype=np.float32)
-    # 修改为支持RGB图像的维度：(len_ds, 3, height, width)
+
     descriptors = np.empty((len_ds, 3, *descr_dim), dtype=np.float32)
 
     with torch.no_grad():

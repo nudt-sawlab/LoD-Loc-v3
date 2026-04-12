@@ -78,11 +78,6 @@ def qvec2rotmat(qvec):
 
 
 def _make_materials_emission():
-    """
-    For each material, build a simple Emission-only node tree so that:
-      - Each building keeps its base color.
-      - Color does not depend on lighting (roof和立面颜色完全一致).
-    """
     for mat in bpy.data.materials:
         # Try to read an existing base color
         base_col = None
@@ -153,7 +148,7 @@ def prepare_world(image_save_path, name):
     bpy.context.scene.render.image_settings.color_depth = '16'
     bpy.context.scene.render.image_settings.color_mode = 'RGB'
 
-    # 必须设置，否则无法输出深度
+
     bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
 
     # Clear default nodes
@@ -172,7 +167,7 @@ def prepare_world(image_save_path, name):
     for output_node in [depth_file_output]: #image_file_output
         output_node.base_path = ''
 
-    # 输出路径            
+
     scene.render.filepath = image_save_path
     depth_file_output.file_slots[0].path = scene.render.filepath + name
     bpy.ops.render.render(write_still=True)

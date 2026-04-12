@@ -87,7 +87,7 @@ def get_ref_model(args, cuda=True):
         state_dict = torch.load(args.pretrain)
         new_state_dict = {}
         for key, value in state_dict['state_dict'].items():
-            # 检查是否需要修改键名
+
             if key.startswith("model.feature_extraction."):
                 new_key = key.replace("model.feature_extraction.", "")
             else:

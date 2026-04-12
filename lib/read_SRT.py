@@ -25,7 +25,7 @@ def write_to_line(information, GROUPLENGTH, i, SRT_name, fps, sensorH, sensorW, 
         focal_len_com = eval(focal_info[:-1])
         focal_len = 6.83 * focal_len_com / 31.7
 
-    # GPS转世界坐标
+
     wgs84 = pyproj.CRS('EPSG:4326')
     cgcs2000 = pyproj.CRS('EPSG:4547')
     # from_crs = crs_WGS84
@@ -41,7 +41,7 @@ def write_to_line(information, GROUPLENGTH, i, SRT_name, fps, sensorH, sensorW, 
     # transformer = Transformer.from_crs(from_crs, to_cgcs)
     # new_x, new_y = transformer.transform(lat, lon)
 
-    # 欧拉角转四元数
+
     euler = [yaw,pitch,roll]
     ret = R.from_euler('zxy',[float(euler[0]), 90-float(euler[1]), float(euler[2])],degrees=True)
     R_matrix = ret.as_matrix()

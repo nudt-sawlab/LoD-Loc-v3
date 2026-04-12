@@ -12,16 +12,16 @@ class RealTime_render:
 
         # load 3D model renderer (Blender-based)
         self.renderer = RenderImageProcessor(config=self.config)
-        self.euler_angles = 0.  #相机角度
-        self.translation = 0.   #位置  
+        self.euler_angles = 0.
+        self.translation = 0.
         
     def receive_from_web_server(self, config_file, config_web = None):
         
         if config_web is None:
             with open(config_file) as web_fp:
                 config_web = json.load(web_fp)
-        self.euler_angles = config_web['euler_angles']  #相机角度
-        self.translation = config_web['translation']   #位置  
+        self.euler_angles = config_web['euler_angles']
+        self.translation = config_web['translation']
 
     def update_render_pose(self, ret):
         q_w2c = ret['qvec']
@@ -38,8 +38,8 @@ class RealTime_render:
         print("Euler angles in 'xyz' order (in degrees):", self.euler_angles[0], self.euler_angles[1], 360-self.euler_angles[2])
         print("Translation in WGS84:", self.translation)
     def delay_to_load_map(self, config_web):
-        self.euler_angles = config_web['euler_angles']  #相机角度
-        self.translation = config_web['translation']   #位置  
+        self.euler_angles = config_web['euler_angles']
+        self.translation = config_web['translation']
         for i in range(500):
             self.renderer.update_pose(self.translation, self.euler_angles)
     def rendering(self, config_web):
@@ -47,8 +47,8 @@ class RealTime_render:
         # self.query_path = config_web['query_path']
         # self.query_image = cv2.imread(self.query_path, cv2.IMREAD_GRAYSCALE) # query image path
 
-        self.euler_angles = config_web['euler_angles']  #相机角度
-        self.translation = config_web['translation']   #位置  
+        self.euler_angles = config_web['euler_angles']
+        self.translation = config_web['translation']
         
         self.renderer.update_pose(self.translation, self.euler_angles)
         color_image = self.renderer.get_color_image()
@@ -114,22 +114,22 @@ class RealTime_render:
         euler_angles = transform.convert_quaternion_to_euler(q_c2w)
         
         return translation, euler_angles
-    # 将给定的世界坐标系到相机坐标系的位姿（w2c_pose）转换为 WGS84 坐标系下的位姿
+
     def get_pose_w2cToWGS84_batch(self, w2c_pose):
         
-        w2c_pose = np.array(w2c_pose)  # 将输入转为numpy数组，支持批量操作
-        # 计算从相机坐标系到世界坐标系的位姿:
-        c2w_pose = np.linalg.inv(w2c_pose)  # 对每个4x4矩阵求逆，得到c2w（相机到世界）
-        # 从c2w_pose中提取出旋转矩阵 R_c2w 和位移向量 t_c2w。
-        # 这里的切片语法用于提取所有样本的前 3 行和前 3 列（旋转部分）以及前 3 行的最后一列（位移部分）。
-        R_c2w = c2w_pose[:, 0:3, 0:3]  # 提取前3x3为旋转部分，shape=(N,3,3)
-        t_c2w = c2w_pose[:, 0:3, 3]    # 提取前三行为平移，shape=(N,3)
+        w2c_pose = np.array(w2c_pose)
+
+        c2w_pose = np.linalg.inv(w2c_pose)
+
+
+        R_c2w = c2w_pose[:, 0:3, 0:3]
+        t_c2w = c2w_pose[:, 0:3, 3]
 
         # q_c2w = rotmat2qvec(R_c2w)
         # translation = transform.cgcs2000towgs84_batch(t_c2w)
-        # 平移量和欧拉角
-        translation = t_c2w # 直接用平移向量
-        euler_angles = transform.convert_quaternion_to_euler_batch(R_c2w) # 旋转矩阵转欧拉角
+
+        translation = t_c2w
+        euler_angles = transform.convert_quaternion_to_euler_batch(R_c2w)
         
         return translation, euler_angles
         

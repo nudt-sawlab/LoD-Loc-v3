@@ -8,7 +8,7 @@ import torchvision.transforms as T
 from gloc.utils import read_model_nopoints as read_model, parse_cam_model, qvec2rotmat
 from gloc.utils.camera_utils import read_cameras_intrinsics, Image as RImage
 
-# 继承自 data.Dataset 的 PyTorch 数据集类，用于处理与相机内部参数和图像相关的数据
+
 class IntrinsicsDataset(data.Dataset):
     def __init__(self, name, paths_conf, transform=None):
         self.name = name
@@ -17,8 +17,8 @@ class IntrinsicsDataset(data.Dataset):
         self.q_files = paths_conf['q_intrinsics']
         self.transform = transform
 
-        # 从 load_colmap 和 load_queries 方法加载数据库中的图像和查询的内部参数。
-        # 将数据库的内部参数和查询的内部参数合并到 self.intrinsics 中
+
+
         self.db_images, self.db_intrinsics = IntrinsicsDataset.load_colmap(self.colmap_model)
         self.q_list, self.q_intrinsics = IntrinsicsDataset.load_queries(self.q_files)
         self.intrinsics = self.db_intrinsics.copy()
@@ -31,13 +31,13 @@ class IntrinsicsDataset(data.Dataset):
 
         self.db_frames_idxs = list(range(len(self.db_images)))
         self.q_frames_idxs = list(np.arange(len(self.q_list)) + len(self.db_images))
-        # 从 db_images 中提取每个图像的四元数（qvec）和位移（tvec）并存储在数组中。
+
         self.db_qvecs = np.array(list(map(lambda x:x.qvec, self.db_images)))
         self.db_tvecs = np.array(list(map(lambda x:x.tvec, self.db_images)))
 
         self.n_db = len(self.db_images)
         self.n_q = len(self.q_list)
-        # 记录数据库图像和查询图像的数量，并在日志中输出。
+
         logging.info(f'Loaded dataset with {self.n_db} db images and {self.n_q} queries w/ intrinsics')
         
     def get_basename(self, im_idx):

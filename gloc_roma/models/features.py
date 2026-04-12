@@ -195,7 +195,7 @@ class FoundationVPRNet(nn.Module):
         return x
         
     def forward_cnn1(self, x):
-        # 修改多尺度融合（feature map）
+
         x_output = self.backbone(x) 
         x = x_output["x_norm_patchtokens"]
         x0_cls = x_output["x_norm_clstoken"]
@@ -229,7 +229,7 @@ class DinoFeatures_contrast(BaseFeaturesClass):
         self.foundation_model_path = conf.pretrain
         self.patch_size = 14
 
-        self.feature_extraction = FoundationVPRNet(pretrained_foundation = False, foundation_model_path = self.foundation_model_path)  #改
+        self.feature_extraction = FoundationVPRNet(pretrained_foundation = False, foundation_model_path = self.foundation_model_path)
         initial_parameter(self.feature_extraction)
 
     # override

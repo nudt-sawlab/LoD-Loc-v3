@@ -18,10 +18,10 @@ class GSplattingConf():
 
 
 def get_renderer(args, paths_conf):
-    # renderer是o3d
+
     if args.renderer == 'o3d':
         rend_class = MeshRenderer
-        # conf是NotImplemented
+
         conf = O3DConf(paths_conf[args.name]['mesh_path'])
 
     elif args.renderer == 'nerf':

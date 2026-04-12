@@ -21,7 +21,7 @@ def get_retrieval_predictions(model_name, res, pose_dataset, topk=5):
     logging.info('Computing first retrieval prediction...')
     all_pred_t, all_pred_R = utils.get_predictions(db_descriptors, q_descriptors, pose_dataset, top_k=topk)
     # all_true_t, all_true_R, all_pred_t, all_pred_R = utils.get_predictions_w_truths(db_descriptors, q_descriptors, pd, top_k=topk)
-    # 输出每个查询的候选平移（t）和旋转（R）估计。定位流程中基于特征检索获得初始位姿估计的关键步骤
+
     return all_pred_t, all_pred_R
     
 

@@ -21,12 +21,12 @@ class BaseProtocol:
         self.center_std, self.max_angle = self.scaler.get_noise()
     
     def get_pertubr_str(self, step, res):
-        # 计算位置标准差字符串
+
         c_str = "_".join(list(map(lambda x: f'{x:.1f}'.replace('.', ','), map(float, self.center_std))))
-        # 计算最大旋转角度字符串
+
         angle_str = "_".join(list(map(lambda x: f'{x:.1f}'.replace('.', ','), map(float, self.max_angle))))
 
-        # 生成扰动字符串
+
         perturb_str = f'pt{self.protocol}_s{step}_sz{res}_theta{angle_str}_t{c_str}'
         return perturb_str
     
@@ -112,12 +112,12 @@ class Protocol2(BaseProtocol):
         
     # override
     def resample(self, K, q_name, pred_t, pred_R, beam_i=0, *args, **kwargs):
-        # K: 相机内参矩阵
-        # q_name: 查询图像名称，用于生成渲染图的唯一标识
-        # pred_t: 预测的平移向量列表 M*3
-        # pred_R: 预测的旋转矩阵列表 M*3*3
-        # beam_i: 当前 beam 的编号
-        # 其他 *args, **kwargs: 可选参数，未使用
+
+
+
+
+
+
         render_qvecs = []
         render_ts = []
         calibr_pose = []
@@ -128,7 +128,7 @@ class Protocol2(BaseProtocol):
             t = pred_t[i]  
             R = pred_R[i]  
             
-            qvec = rotmat2qvec(R) #将3*3旋转矩阵转换为四元数
+            qvec = rotmat2qvec(R)
 
             render_qvecs.append(qvec)
             render_ts.append(t)
@@ -136,7 +136,7 @@ class Protocol2(BaseProtocol):
             # (Pdb) r_names
             # ['query_DJI_20231018092903_0016_D_0beam0'] 
             T = np.eye(4)
-            # 把 R 和 t 组成一个 4x4 齐次变换矩阵 T，前三列前三行是旋转矩阵，最后一列前三行是平移矩阵
+
             T[0:3, 0:3] = R
             T[0:3, 3] = t
             calibr_pose.append((T, K))
@@ -150,7 +150,7 @@ class Protocol2(BaseProtocol):
             R = pred_R[i]  
             # t_prior = prior_t_beam[i]
             # R_prior = prior_R_beam[i]
-            # 扰动后的平移向量、四元数、位姿
+
             new_ts, new_qvecs, new_poses = self.sampler.sample_batch(views_per_candidate, self.center_std, self.max_angle, 
                                                                      t, R)
             render_ts += new_ts

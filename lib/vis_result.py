@@ -20,23 +20,23 @@ for filename in img_list:
 
     img = Image.new(img1.mode, img1.size)
 
-    # 获取图片的宽度和高度
+
 
     width, height = img1.size
 
-    # 将第一张图片的左上角和右下角复制到新图片的对应位置
+
 
     img.paste(img1.crop((0, 0, width // 2, height // 2)), (0, 0))
 
     img.paste(img1.crop((width // 2, height // 2, width, height)), (width // 2, height // 2))
 
-    # 将第二张图片的右上角和左下角复制到新图片的对应位置
+
 
     img.paste(img2.crop((width // 2, 0, width, height // 2)), (width // 2, 0))
 
     img.paste(img2.crop((0, height // 2, width // 2, height)), (0, height // 2))
 
-    # 保存合成后的图片
+
 
     path = save_path + img_name + '.png'
 

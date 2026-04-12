@@ -131,14 +131,14 @@ def parse_pose(path):
             print("Translation in WGS84:", xyz)
             data_output.append(tuple([name]) + tuple(euler_angles)+ tuple(xyz))
             
-    # 打开一个文件用于写入
+
     output_path = os.path.dirname(path)
     output_file = os.path.join(output_path, 'prior_pose_euler.txt')
     with open(output_file, 'w') as file:
         for item in data_output:
-            # 将元组中的数值转换为字符串，并按照指定格式拼接
+
             line = ' '.join(map(str, item))
-            # 写入文件，并在每行后添加换行符
+
             file.write(line + '\n')
 
 

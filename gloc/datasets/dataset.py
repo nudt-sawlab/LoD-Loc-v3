@@ -44,7 +44,7 @@ class PoseDataset(data.Dataset):
         self.transform = transform
         self.rendered_db = rendered_db
         self.use_render = False
-        # 加载两个txt文件
+
         # 'data/all_colmaps/UAVD4L-LoD/outTraj/colmap_320/images.txt'
         # 'data/all_colmaps/UAVD4L-LoD/outTraj/colmap_320/cameras.txt'
         self.images, self.intrinsics = PoseDataset.load_colmap(self.colmap_model)
@@ -65,10 +65,10 @@ class PoseDataset(data.Dataset):
             self.q_frames_idxs, self.q_tvecs, self.q_qvecs = self.load_txt(queries, all_frames)
     
             all_frames = np.array(list(map(lambda x: x.name, self.images)))
-            # 用 load_txt 方法分别加载数据库和查询集的索引、平移向量（tvecs）、旋转向量（qvecs）。
+
             self.db_frames_idxs, self.db_tvecs, self.db_qvecs = self.load_txt(db, all_frames)
             self.q_frames_idxs, self.q_tvecs, self.q_qvecs = self.load_txt(queries, all_frames)
-            # self.n_q 记录查询集的图片数量。2192
+
             self.n_q = len(self.q_frames_idxs)
         
     def load_txt(self, fpath, all_frames):
@@ -282,9 +282,9 @@ class RenderedImagesDataset(data.Dataset):
                 fields = line.split(' ')
                 
                 name = fields[0]+'.png'
-                # tvec = np.array(tuple(map(float, fields[1:4]))) #写反了
+
                 # qvec = np.array(tuple(map(float, fields[4:8])))
-                qvec = np.array(tuple(map(float, fields[1:5]))) #改
+                qvec = np.array(tuple(map(float, fields[1:5])))
                 tvec = np.array(tuple(map(float, fields[5:8])))
                 im = RImage(id=-1, qvec=qvec, tvec=tvec, name=name, 
                             camera_id='', xys={}, point3D_ids={})

@@ -69,7 +69,7 @@ def parse_args():
     parser.add_argument('--teta', nargs='+', type=float, help='max angle', default=[1])
     parser.add_argument('--center_std', nargs='+', type=float, default=[1., 1., 1.])
     parser.add_argument('--N', type=int, help='N views to render in total, per query', default=20)
-    # 一张候选图1个先验位姿，给出M个相同的位姿，然后×beams（光束），得到4个点，4个点扰动得到N个位姿，得到N个渲染候选图
+
     parser.add_argument('--M', type=int, help='In each beam, perturb the first M rather than only first cand.', default=4)
     parser.add_argument('--gamma', type=float, help='min scale', default=0.1)
 

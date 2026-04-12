@@ -107,7 +107,7 @@ class RandomGaussianSampler():
         for i in range(n_views):
             # use first axis half the time, the other for the rest
             ax_i = i // ((n_views+1) // 2)
-            # ax = self.rotate_axis[ax_i]  #改，只需要yaw
+
             # ax = self.rotate_axis[2]
             # new_tvec, new_qvec, new_T = self.sample(ax, center_std, max_angle, old_t, old_R)
             # axis_name = 'yaw'  #['yaw', 'pitch', 'roll']
@@ -121,23 +121,23 @@ class RandomGaussianSampler():
 
     @staticmethod
     def sample_degree_2(center_std, max_angle, old_t, old_R, t_prior, R_prior):
-        # 进来都是W2C的
+
 
         euler_prior = cal_euler(t_prior, R_prior)
 
-        # 利用角度采样 利用yaw轴
+
         teta = (np.random.rand() * 2 - 1) * max_angle
         new_R, _ = sample_rotation_yaw_roll_pitch(teta, old_t, old_R,euler_prior)
 
-        # 采样 x, y, z
+
         old_center = - old_R.T @ old_t # get image center using original pose
         perturb_c = torch.normal(0., center_std)
         new_center = old_center + np.array(perturb_c) # perturb it 
         new_t = - new_R @ new_center # use the new pose to convert to translation vector
 
-        new_qvec = rotmat2qvec(new_R)  # 将原始旋转矩阵转换为四元数
+        new_qvec = rotmat2qvec(new_R)
 
-        # 构建新的位姿矩阵
+
         new_T = np.eye(4)
         new_T[0:3, 0:3] = new_R
         new_T[0:3, 3] = new_t
@@ -175,7 +175,7 @@ class RandomDoubleAxisSampler():
         'yaw':   [0, 1, 0]  # y, yaw
     }
 
-    # # Blender中
+
     # rotate_axis = {
     #     'pitch': [1, 0, 0], # x, pitch
     #     'yaw':   [0, 0, 1]  # y, yaw
@@ -335,7 +335,7 @@ class RandomSamplerByAxis():
         [0, 0, 1] # z,    Yaw
     ]
     
-    # #Blender 中
+
     # rotate_axis = [
     #     [1, 0, 0], # x, pitch
     #     [0, 0, 1] # y, yaw
@@ -351,7 +351,7 @@ class RandomSamplerByAxis():
         for i in range(n_views):
             # use first axis half the time, the other for the rest
             ax_i = i // ((n_views+1) // 2)
-            # ax = self.rotate_axis[ax_i]  #改，只需要yaw
+
             ax = self.rotate_axis[2] # self.rotate_axis [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
             # new_tvec, new_qvec, new_T = self.sample(ax, center_std, max_angle, old_t, old_R)
             axis_name = 'yaw'  #['yaw', 'pitch', 'roll']
@@ -387,21 +387,21 @@ class RandomSamplerByAxis():
     
     @staticmethod
     def sample_degree(axis_name, center_std, max_angle, old_t, old_R):
-        # 进来都是W2C的
 
-        # 利用角度采样 利用yaw轴，np.random.rand()生成符合均匀分布的随机数(0,1)，
+
+
         teta = (np.random.rand() * 2 - 1) * max_angle
         new_R, _ = sample_rotation_yaw_roll(axis_name, teta, old_t, old_R)
 
-        # 采样 x, y, z
+
         old_center = - old_R.T @ old_t # get image center using original pose
-        perturb_c = torch.normal(0., center_std)# # 生成高斯噪声
+        perturb_c = torch.normal(0., center_std)
         new_center = old_center + np.array(perturb_c) # perturb it 
         new_t = - new_R @ new_center # use the new pose to convert to translation vector
 
-        new_qvec = rotmat2qvec(new_R)  # 将原始旋转矩阵转换为四元数
+        new_qvec = rotmat2qvec(new_R)
 
-        # 构建新的位姿矩阵
+
         new_T = np.eye(4)
         new_T[0:3, 0:3] = new_R
         new_T[0:3, 3] = new_t
@@ -415,7 +415,7 @@ class RandomAndDoubleAxisSampler():
         'yaw':   [0, 1, 0]  # y, yaw
     }
 
-    # #Blender 渲染中
+
     # rotate_axis = {
     #     'pitch': [1, 0, 0], # x, pitch
     #     'roll':   [0, 1, 0],  # y, roll

@@ -4,7 +4,7 @@ from scipy.spatial.transform import Rotation as R
 from datetime import datetime
 from .transform import qvec2rotmat,rotmat2qvec
 def get_hms_w2c():
-    # 欧拉角转四元数
+
     yaw,pitch,roll = 170, 0, 0  #w2c
     x, y, z = 401786.87, 3131345.4, 19.368  #c2w
     euler = [yaw,pitch,roll]

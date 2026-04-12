@@ -59,8 +59,8 @@ def get_query_features(model, dataset, feat_level, bs=1):
 
             descr = model(images)   
             # breakpoint()
-            # descr = descr[feat_level].cpu().numpy()  # 取Path1(即分辨率最高的一級)
-            descr = descr.cpu().numpy()  # 取Path1(即分辨率最高的一級)1
+
+            descr = descr.cpu().numpy()
             descriptors.append(descr)
 
     return descriptors
@@ -76,9 +76,9 @@ def get_query_mask(dataset, bs=1):
 
     images_list = []
     for batch in tqdm(dataloader, ncols=100):
-        images = batch['im'].cuda()  # 提取图像并将其移动到 GPU（如果需要）
+        images = batch['im'].cuda()
         if len(images.shape) == 4:
-            images = images[:,0, :, :]  # 选择第一个通道
+            images = images[:,0, :, :]
         
         images_list.append(images.squeeze())
 
@@ -105,8 +105,8 @@ def get_candidates_mask(dataset, descr_dim, bs=32):
     dl = DataLoader(dataset=dataset, num_workers=8, batch_size=bs)
 
     len_ds = len(dataset)
-    # descr_dim = (448, 602)  # 改 
-    descr_dim = (480, 720)  # 改 Swiss
+
+    descr_dim = (480, 720)
     descriptors = np.empty((len_ds, *descr_dim), dtype=np.float32)
 
     with torch.no_grad():

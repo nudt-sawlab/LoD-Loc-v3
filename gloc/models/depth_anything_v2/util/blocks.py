@@ -121,16 +121,6 @@ class FeatureFusionBlock(nn.Module):
         self.size=size
 
     def forward(self, *xs, size=None):
-        """Forward pass. 
-        *xs: 输入的多个特征图（张量）,xs[0] 是主要特征图,xs[1] 是可选的辅助特征图。
-        如果输入有两个特征图(len(xs) == 2),则会先对辅助特征图进行处理，然后与主要特征图相加。
-        然后，对融合后的特征图进行进一步的残差卷积处理。
-        通过 nn.functional.interpolate 对特征图进行上采样。modifier 用来控制插值的模式和大小。
-        最后，通过 self.out_conv 调整特征图的通道数，并返回输出。
-
-        Returns:
-            tensor: output
-        """
         output = xs[0]
 
         if len(xs) == 2:

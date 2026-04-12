@@ -82,7 +82,7 @@ def load_pose_prior(pose_file, pd, M=1):
         #q_key = os.path.basename(pd.images[idx].name)
         q_key = get_q_key(pd.images[idx].name)
         
-        poses_q = poses_dict[q_key]   ####改 [q_key.split('/')[-1]]
+        poses_q = poses_dict[q_key]
 
         if len(poses_q) == 1:
             qvec, tvec = poses_q[0]
@@ -135,9 +135,9 @@ def repeat_first_preds_per_beam(n_beams, M, preds):
 def get_n_steps(num_queries, render_per_step, max_steps, renderer, hard_stop):
     if hard_stop > 0:
         return hard_stop
-    # if renderer != 'o3d': #原本
+
     #     return max_steps
-    if renderer == 'o3d':  #改
+    if renderer == 'o3d':
         return max_steps
     # due to open3d bug, black images after 1e5 renders
     max_renders = 1e5
@@ -307,7 +307,7 @@ def sort_preds_across_beams(all_scores, all_pred_t, all_pred_R, all_errors_t, al
     flat_err = lambda x: einops.rearrange(x, 'q nb N      -> q (nb N)')
     flat_R = lambda x:   einops.rearrange(x, 'q nb N d1 d2 -> q (nb N) d1 d2', d1=3, d2=3)
     flat_t = lambda x:   einops.rearrange(x, 'q nb N d     -> q (nb N) d', d=3)
-    flat_preds = np.argsort(flat_err(all_scores))  # 要从大到小
+    flat_preds = np.argsort(flat_err(all_scores))
     all_errors_t = np.take_along_axis(flat_err(all_errors_t), flat_preds, axis=1)
     all_errors_R = np.take_along_axis(flat_err(all_errors_R), flat_preds, axis=1)
     flat_pred_t = flat_t(all_pred_t)

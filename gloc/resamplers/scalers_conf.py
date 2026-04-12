@@ -8,15 +8,15 @@ from gloc.resamplers.scalers import ConstantScaler, UniformScaler
 
 def get_sampler(args, sampler_name, scaler_name):    
     # sampler='rand_yaw_or_pitch' scaler_name = '1'
-    max_angle_delta = torch.tensor(args.teta)         # 最大角度扰动
-    max_center_std = torch.tensor(args.center_std)    # 最大位置扰动
+    max_angle_delta = torch.tensor(args.teta)
+    max_center_std = torch.tensor(args.center_std)
 
     sampler_conf = SamplerConf()
-    # 采样器名称	                含义	                    示例用途
-    # rand	                高斯扰动采样	            随机生成全姿态扰动
-    # rand_yaw_or_pitch	    随机扰动 Yaw 或 Pitch 轴	控制特定轴旋转扰动
-    # rand_yaw_and_pitch	    同时扰动 Yaw 和 Pitch	    更复杂的方向扰动
-    # rand_and_yaw_and_pitch	组合多种扰动方式	         综合扰动场景
+
+
+
+
+
     if sampler_name == 'rand':
         sampler_class = RandomGaussianSampler
     elif sampler_name == 'rand_yaw_or_pitch':

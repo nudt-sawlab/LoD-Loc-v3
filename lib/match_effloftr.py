@@ -56,15 +56,15 @@ class ImageMatcher:
     def match_single_pair(self, image_id, query_img, ref_img, save_loc_path: Path, count=0):
         
         # padding
-        # 原始尺寸
+
         original_height, original_width = query_img.shape[:2]
-        # 补齐倍数
+
         multiple = 32
-        # 计算补齐后的宽度和高度
+
         padded_width = self.calculate_padded_size(original_width, multiple)
         padded_height = self.calculate_padded_size(original_height, multiple)
 
-        # 创建新的空白图像，这里使用黑色背景
+
         img0_raw = np.zeros((padded_height, padded_width), dtype=np.uint8)
         img0_raw[0:original_height, 0:original_width] = query_img
         
@@ -72,11 +72,11 @@ class ImageMatcher:
         
         img1_raw_ = cv2.cvtColor(ref_img, cv2.COLOR_BGR2GRAY)  # render image MAT
         original_height, original_width = img1_raw_.shape[:2]
-        # 计算补齐后的宽度和高度
+
         padded_width = self.calculate_padded_size(original_width, multiple)
         padded_height = self.calculate_padded_size(original_height, multiple)
 
-        # 创建新的空白图像，这里使用黑色背景
+
         img1_raw = np.zeros((padded_height, padded_width), dtype=np.uint8)
         img1_raw[0:original_height, 0:original_width] = img1_raw_
         # scale
@@ -107,7 +107,7 @@ class ImageMatcher:
             mconf = torch.tensor(mconf[index]).float()
             mkpts0q = torch.tensor(mkpts0[index,:]).float()
             mkpts1r = torch.tensor(mkpts1[index,:]).float()
-            # 显示匹配结果
+
             if len(mconf) > 0 and mkpts0q.shape[0] > count:
                 if not os.path.exists(save_loc_path / 'matches'):
                     os.makedirs(save_loc_path / 'matches/')

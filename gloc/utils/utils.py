@@ -21,7 +21,7 @@ def log_pose_estimate(render_dir, pd, pred_R, pred_t, flat_preds=None, top_ns=[3
             idx = pd.q_frames_idxs[q_idx]
             name = pd.images[idx].name
             if flat_preds is not None:
-                # flat_preds[q_idx,0]得到的是当前查询图在排名第一的索引
+
                 qvec = rotmat2qvec(pred_R[q_idx][flat_preds[q_idx,0]])
                 tvec = pred_t[q_idx][flat_preds[q_idx,0]]
             else:
@@ -69,8 +69,8 @@ def load_pose_prior(pose_file, pd, M=1):
     est_poses = list(map(lambda x: x.strip().split(' '), est_poses))
     poses_dict = {}
     for pose in est_poses:
-        qvec_float = list(map(float, pose[1:5]))# 四元数
-        tvec_float = list(map(float, pose[5:8]))# 平移向量
+        qvec_float = list(map(float, pose[1:5]))
+        tvec_float = list(map(float, pose[5:8]))
         if pose[0] not in poses_dict:
             poses_dict[pose[0]] = []
             
@@ -88,7 +88,7 @@ def load_pose_prior(pose_file, pd, M=1):
         #q_key = os.path.basename(pd.images[idx].name)
         q_key = get_q_key(pd.images[idx].name) # pd.images[0].name 'query/DJI_20231018092903_0016_D.JPG'
         
-        poses_q = poses_dict[q_key]   ####改 [q_key.split('/')[-1]] [(array([ 0.548563,  0.832168, -0.068569,  0.043277]), array([-208.967456,  -23.53692 ,  273.411464]))]
+        poses_q = poses_dict[q_key]
 
         if len(poses_q) == 1:
             qvec, tvec = poses_q[0]
@@ -107,7 +107,7 @@ def load_pose_prior(pose_file, pd, M=1):
                 tvec = tvec
                 all_pred_t[q_idx, i] = tvec
                 all_pred_R[q_idx, i] = R
-    # 输出 all_pred_t 和 all_pred_R ，分别为 shape=(n_q, M, 3) 和 (n_q, M, 3, 3) 的平移和旋转矩阵数组。
+
     return all_pred_t, all_pred_R
 
 
@@ -117,8 +117,8 @@ def reshape_preds_per_beam(n_beams, M, preds):# 2 2
     for i in range(n_beams):
         # with n-beams, beam i gets the i-th cand., and the i+n, i+2, so on
         # so take one every n
-        # preds[:, i::n_beams]: 取 beam i 的所有候选（每隔 n_beams 取一次）
-        # [:, :M, :]: 取每个 beam 的前 M 个候选   
+
+
         ts  = preds[:,i::n_beams][:,:M, :]# 
         to_stack.append(ts)
 
@@ -143,21 +143,21 @@ def repeat_first_preds_per_beam(n_beams, M, preds):
 def get_n_steps(num_queries, render_per_step, max_steps, renderer, hard_stop):
     if hard_stop > 0:
         return hard_stop
-    # if renderer != 'o3d': #原本
+
     #     return max_steps
-    if renderer == 'o3d':  #改
+    if renderer == 'o3d':
         return max_steps
     # due to open3d bug, black images after 1e5 renders
-    # - num_queries 表示查询图像的数量
-    # - render_per_step 表示每一步每张查询图像要渲染的候选视图数（如args.N）
-    # - 该公式计算在最大渲染次数限制下，整个流程最多可以迭代多少步（step），每步会处理 num_queries*render_per_step 张渲染图。
+
+
+
     max_renders = 1e5
     n_steps = ceil(max_renders / (num_queries*render_per_step))
     return n_steps
         
     
 def eval_poses(errors_t, errors_R, descr=''):
-    # median求中位数
+
     med_t = np.median(errors_t)
     med_R = np.median(errors_R)
     out = f'Results {descr}:'
@@ -178,11 +178,11 @@ def eval_poses(errors_t, errors_R, descr=''):
 def eval_poses_top_n(all_errors_t, all_errors_R, descr=''):
     best_candidates = [1, 5, max(20, all_errors_R.shape[1])]# [1, 5, 52]
 
-    # 计算所有查询图的第一个候选图分别的平移误差的中位数。
+
     med_t = np.median(all_errors_t[:, 0])
-    # 最佳候选的平移误差中位数
+
     med_best_t = np.median(all_errors_t.min(axis=1))
-    # 计算所有查询图的第一个候选图分别的平移误差的中位数。
+
     med_R = np.median(all_errors_R[:, 0])
     med_best_R = np.median(all_errors_R.min(axis=1))
 
@@ -229,20 +229,20 @@ def get_predictions(db_descriptors, q_descriptors, pose_dataset, fc_output_dim=5
 
 
 def get_error(R, t, R_gt, t_gt):
-    # 把真值和估计的平移都转换到世界坐标系中，然后计算它们的欧几里得距离作为误差。
-    # R_gt.T @ t_gt：是把真值平移从相机坐标系变换回世界坐标系。
-    # R.T @ t：是把估计的平移也变换回世界坐标系。
-    # -R_gt.T @ t_gt + R.T @ t：表示它们之间的差异。
-    # np.linalg.norm(..., axis=0)：计算向量差的L2范数，即欧氏距离。
-    # 所以，e_t 表示估计位置和真实位置之间的距离误差（单位通常是米或厘米）。
+
+
+
+
+
+
     e_t = np.linalg.norm(-R_gt.T @ t_gt + R.T @ t, axis=0)
 
-    # R_gt.T @ R：表示从真实旋转变换到估计旋转之间的旋转矩阵。
-    # np.trace(...)：计算这个旋转矩阵的迹（对角线元素之和）。
-    # θ = arccos((trace(R_rel) - 1)/2)：是旋转矩阵转角度的公式。
-    # np.clip(..., -1., 1.)：是为了避免由于数值误差导致 arccos 输入超出定义域 [-1, 1]。
-    # np.rad2deg(...)：将弧度转换为角度。
-    # 所以，e_R 就是两个旋转之间的角度差异（误差），单位是度。
+
+
+
+
+
+
     cos = np.clip((np.trace(np.dot(R_gt.T, R)) - 1) / 2, -1., 1.)
     e_R = np.rad2deg(np.abs(np.arccos(cos)))
     
@@ -334,11 +334,11 @@ def get_pose_from_preds(q_idx, pd, rd, predictions, top_k=20):
 
 def sort_preds_across_beams(all_scores, all_pred_t, all_pred_R, all_errors_t, all_errors_R):
     # flatten stuff to sort predictions based on similarity
-    # 对多个束光中的预测结果进行排序，以便确定最佳的位姿估计
+
     flat_err = lambda x: einops.rearrange(x, 'q nb N      -> q (nb N)')
     flat_R = lambda x:   einops.rearrange(x, 'q nb N d1 d2 -> q (nb N) d1 d2', d1=3, d2=3)
     flat_t = lambda x:   einops.rearrange(x, 'q nb N d     -> q (nb N) d', d=3)
-    flat_preds = np.argsort(flat_err(-all_scores))  # 要从大到小
+    flat_preds = np.argsort(flat_err(-all_scores))
     all_errors_t = np.take_along_axis(flat_err(all_errors_t), flat_preds, axis=1)
     all_errors_R = np.take_along_axis(flat_err(all_errors_R), flat_preds, axis=1)
     flat_pred_t = flat_t(all_pred_t)

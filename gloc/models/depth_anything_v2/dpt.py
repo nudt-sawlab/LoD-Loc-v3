@@ -147,7 +147,7 @@ class DPTHead(nn.Module):
         out = F.interpolate(out, (int(patch_h * 14), int(patch_w * 14)), mode="bilinear", align_corners=True) #Debug
         out = self.scratch.output_conv2(out)
         
-        return out, (path_1, path_2, path_3, path_4)  #改
+        return out, (path_1, path_2, path_3, path_4)
 
 
 class DepthAnythingV2(nn.Module):
@@ -178,7 +178,7 @@ class DepthAnythingV2(nn.Module):
         
         # DINOv2 Feature
         features = self.pretrained.get_intermediate_layers(x, self.intermediate_layer_idx[self.encoder], return_class_token=True)
-        # vis_feature = self.pretrained.get_intermediate_layers(x, self.intermediate_layer_idx[self.encoder], reshape=True)  #改
+
         
         depth, path = self.depth_head(features, patch_h, patch_w)
         # depth = F.relu(depth)

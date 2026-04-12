@@ -274,7 +274,7 @@ class DinoVisionTransformer(nn.Module):
             #         residuals = residuals + fusion_residual
             #     else:
             #         residuals = residuals + self.before_blocks[str(i)](x)
-            x = blk(x) #改
+            x = blk(x)
        
 
         x_norm = self.norm(x)

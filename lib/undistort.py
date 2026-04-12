@@ -5,22 +5,10 @@ from pathlib import Path
 import glob
 import shutil
 def read_intrinsics(camera):
-    """
-    计算35mm等效焦距和内参矩阵。
-    
-    参数:
-    image_width_px -- 图像的宽度（像素）
-    image_height_px -- 图像的高度（像素）
-    sensor_width_mm -- 相机传感器的宽度（毫米）
-    sensor_height_mm -- 相机传感器的高度（毫米）
-    
-    返回:
-    K -- 内参矩阵，形状为3x3
-    """
     image_width_px, image_height_px, fx, fy, cx, cy = camera
-    # 计算内参矩阵中的焦距和主点坐标
+
     
-    # 构建内参矩阵 K
+
     K = [[fx, 0, cx],
         [0, fy, cy],
         [0, 0, 1]]

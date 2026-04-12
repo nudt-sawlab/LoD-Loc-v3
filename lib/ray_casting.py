@@ -45,65 +45,58 @@ class TargetLocation():
 
 
     def interpolate_along_line(self, area, x, y, num_points):
-        # 构造一个网格坐标系
+
         # xx, yy = np.meshgrid(np.arange(image.shape[1]), np.arange(image.shape[0]))
         
-        # 根据采样点的坐标，从图像中取得对应的像素值
+
         sample_values = map_coordinates(area, [y, x], order=1)
         # sample_values = np.max(sample_values, axis=1).reshape(-1, 1)
 
-        # 将采样点对应的像素值重新排列成num_samples长度的数组
+
         sample_array = sample_values.reshape((num_points,))
 
         return sample_array
 
     def pixel_to_world_coordinate(self, K, R, t, u, v):
-        # 将2D像素坐标转换为相机坐标系下的坐标
+
         p_camera = np.array([[u], [v], [1]])
         p_camera = np.linalg.inv(K).dot(p_camera)
 
-        # 将相机坐标系下的坐标转换为世界坐标系下的坐标
+
         p_world = R.dot(p_camera) + t
 
         return p_world
 
     def get_index_array(self, dataset):
-        # 读取tif图像
+
         ds = dataset
 
-        # 获取地理信息
+
         geotransform = ds.GetGeoTransform()
         x_origin, x_pixel_size, _, y_origin, _, y_pixel_size = geotransform
 
-        # 获取图像大小
+
         rows, cols = ds.RasterYSize, ds.RasterXSize
 
-        # 生成x坐标数组和y坐标数组
+
         x = np.arange(cols) * x_pixel_size + x_origin
         y = np.arange(rows) * y_pixel_size + y_origin
 
         # index_array = [x, y]
-        # 生成索引数组
+
         # xx, yy = np.meshgrid(x, y)
         # index_array = np.stack([yy.ravel(), xx.ravel()], axis=1)
         return x, y
 
     def line_equation_3d(self, point1, point2):
-        """
-        求两点所在直线的方程
 
-        :param point1: 第一个点的坐标，形如 [x1, y1, z1]
-        :param point2: 第二个点的坐标，形如 [x2, y2, z2]
-        :return: 直线方程的系数，形如 [a, b, c, d]，表示 ax + by + cz + d = 0
-        """
-        # 将点转换成向量形式
         p1 = np.array(point1)
         p2 = np.array(point2)
 
-        # 求解直线方向向量
+
         direction = p2 - p1
 
-        # 求解直线方程系数
+
         a, b, c = direction
         d = -(a * p1[0] + b * p1[1] + c * p1[2])
 
@@ -117,36 +110,23 @@ class TargetLocation():
         return [A, B, C]
 
     def line_equation(self, A, B, Z):
-        """
-        计算射线和投影直线的方程
-        :param A: A点坐标 (x,y,z)
-        :param B: B点坐标 (x1,y1,z1)
-        :param Z: 平面Z的值
-        :return: 射线方程和投影直线方程
-        """
-        # 计算射线方程
+
         x, y, z = A
         x1, y1, z1 = B
         t = np.array([x1 - x, y1 - y, z1 - z])
         ray = lambda k: np.array([x, y, z]) + k * t
 
-        # 计算投影直线方程
+
         k = (Z - z) / t[2]
         projection = ray(k)[:2]
 
         return ray, projection
 
     def intersection(self, ray_eqn, Z):
-        """
-        计算射线与平面Z的交点
-        :param ray_eqn: 射线方程
-        :param Z: 平面Z的值
-        :return: 交点坐标
-        """
-        # 计算k值
+
         k = (Z - ray_eqn(0)[2]) / (ray_eqn(1)[2] - ray_eqn(0)[2])
         
-        # 计算交点坐标
+
         intersection_point = ray_eqn(k)
         
         return intersection_point
@@ -159,28 +139,22 @@ class TargetLocation():
         return row, col
 
     def sample_points_on_line(self, line_equation, num_sample, x_minmax):
-        # 根据斜截式计算 y 范围
+
         A, B, C = line_equation[0], line_equation[1], line_equation[2]
         x_min, x_max = x_minmax[0], x_minmax[1]
 
-        # 在 y 范围内均匀采样 num_points 个点
+
         x = np.linspace(x_min, x_max, num_sample)
         y = (-A/B)*x - (C/B)
 
         return x, y
 
     def find_z(self, ray_eqn, points):
-        """
-        计算投影直线上的点在射线方程中对应的Z值
-        :param ray_eqn: 射线方程
-        :param points: 投影直线上的点的平面坐标 (x,y)
-        :return: Z值列表
-        """
-        # 计算k值
+
         k = (points[0] - ray_eqn(0)[0]) / (ray_eqn(1)[0] - ray_eqn(0)[0])
         # z_values = (-d-a*x-b*y)/c
         
-        # 计算Z值
+
         z_values = [ray_eqn(k_i)[2] for k_i in k]
         
         return z_values
@@ -198,19 +172,19 @@ class TargetLocation():
         intersection_point = self.intersection(ray_eqn, self.area_minZ)
         x_minmax = [t[0],intersection_point[0]]
 
-        # 直线采样
+
         x, y = self.sample_points_on_line(line2D_abcd, self.num_sample, x_minmax)
 
-        # DSM采样,先将xy对应的地理信息坐标索引求到
+
         row, col = self.geo_coords_to_array_index(x, y, self.geotransform)
         sampleHeight = self.interpolate_along_line(self.area, col ,row, self.num_sample)
 
-        #得到三维直线上的z值
+
         z_values = self.find_z(ray_eqn,[x, y])
         z_values = torch.tensor(z_values)
         z_values = z_values.squeeze()
 
-        #寻找最近点
+
         sampleHeight = torch.tensor(sampleHeight)
         abs_x = torch.abs(z_values - sampleHeight)
         min_val, min_idx = torch.min(abs_x, dim=0)
@@ -220,52 +194,28 @@ class TargetLocation():
         
         return [x[min_idx], y[min_idx], z_values[min_idx]]
     def get_intrinsic(self, camera):
-            """
-            计算35mm等效焦距和内参矩阵。
-            
-            参数:
-            image_width_px -- 图像的宽度（像素）
-            image_height_px -- 图像的高度（像素）
-            sensor_width_mm -- 相机传感器的宽度（毫米）
-            sensor_height_mm -- 相机传感器的高度（毫米）
-            
-            返回:
-            K -- 内参矩阵，形状为3x3
-            """
             image_width_px, image_height_px, sensor_width_mm, sensor_height_mm, f_mm = camera
-            # 计算焦距在x和y方向上的比率
+
             focal_ratio_x = f_mm / sensor_width_mm
             focal_ratio_y = f_mm / sensor_height_mm
             
-            # 计算内参矩阵中的焦距和主点坐标
+
             fx = image_width_px * focal_ratio_x
             fy = image_height_px * focal_ratio_y
             cx = image_width_px / 2
             cy = image_height_px / 2
             
-            # 构建内参矩阵 K
+
             K = [[fx, 0, cx],
                 [0, fy, cy],
                 [0, 0, 1]]
             
             return K
     def get_query_intrinsic(self, camera):
-            """
-            计算35mm等效焦距和内参矩阵。
-            
-            参数:
-            image_width_px -- 图像的宽度（像素）
-            image_height_px -- 图像的高度（像素）
-            sensor_width_mm -- 相机传感器的宽度（毫米）
-            sensor_height_mm -- 相机传感器的高度（毫米）
-            
-            返回:
-            K -- 内参矩阵，形状为3x3
-            """
             image_width_px, image_height_px, fx, fy, cx, cy = camera
-            # 计算内参矩阵中的焦距和主点坐标
+
             
-            # 构建内参矩阵 K
+
             K = [[fx, 0, cx],
                 [0, fy, cy],
                 [0, 0, 1]]

@@ -30,7 +30,7 @@ def get_transform(args, colmap_dir=''):
         new_w = patch_size * ((w * scale_factor) // patch_size)
 
         new_h =  480#int(new_h)  480  448
-        new_w =  720#int(new_w) 改 720 Swiss  602
+        new_w =  720
 
         transform = T.Compose([
             T.ToTensor(),

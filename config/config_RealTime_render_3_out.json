@@ -1,0 +1,67 @@
+{
+    "render2loc": {
+        "dev": "phone",
+        "engine": "osg",
+        "model_ckpt": "./weights/outdoor_ds.ckpt",
+        "render_images": "images/render_upright/",
+        "datasets": "/home/ubuntu/code/render2loc/temp/loca_results/",
+        "query_camera": [
+            1920,
+            1080,
+            100000,
+            100000,
+            960,
+            540
+        ],
+        "render_camera": [
+            602,
+            448,
+            430.79748,
+            426.64093,
+            303.69349,
+            217.400193
+        ],
+        "render_camera_out": [
+            602,
+            448,
+            17.3,
+            13.0,
+            24.00,
+            55.40, 
+            1.34375
+        ],
+        "render_camera_in_mm": [
+            602,
+            448,
+            6.29,
+            4.71,
+            4.5,
+            56.40526, 
+            1.34375
+        ],
+        "distortion": [
+            0.293656243361741,
+            -1.13028438807054,
+            0.000113131446409535,
+            5.29911015250079e-05,
+            1.24340747827876
+        ],
+        "results": "",
+        "osg": {
+            "model_path_3Dtile": "/v1/3dtiles/datasets/CgA/files/tileset.json",
+            "model_path_": "/v1/3dtiles/datasets/CgA/files/move22.obj",
+            "model_path": "/home/amax/code_render/LIB/pure_code/LoD v3_dataset/obj/FCW_obj/inTraj/修改最终版/UAVD4L-LoD3.0_clean2.obj",
+            "model_path_without_color": "/home/amax/code_render/LIB/pure_code/LoD v3_dataset/obj/FCW_obj/inTraj/修改最终版/UAVD4L-LoD3.0_clean2_without_color.obj",
+            "init_rot": [
+                0,
+                0,
+                0
+            ],
+            "init_trans": [
+                0,
+                0,
+                0
+            ]
+        }
+    }
+}

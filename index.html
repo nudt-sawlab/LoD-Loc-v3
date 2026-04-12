@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoD-Loc v3</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for Math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Noto Sans', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4f46e5, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- 1. Header: Title, Authors, Links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+    <header class="py-12 bg-white shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+                <span class="gradient-text">LoD-Loc v3: Generalized Aerial Localization<br>in Dense Cities using Instance Silhouette Alignment</span>
+            </h1>
+            
+            <p class="text-2xl text-gray-600 font-bold mb-6">CVPR 2026</p>
+
+            <div class="text-lg mb-6">
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Shuaibang Peng</a><sup>1</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Juelin Zhu</a><sup>1†</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Xia Li</a><sup>1</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Shen Yan</a><sup>1†</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Kun Yang</a><sup>2</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Maojun Zhang</a><sup>1</sup></span>
+                <span class="mx-2"><a href="#" class="text-blue-600 hover:underline">Yu Liu</a><sup>1</sup></span>
+            </div>
+            
+            <div class="text-gray-600 text-sm mb-4">
+                <span class="mx-3"><sup>1</sup> National University of Defense Technology</span>
+                <span class="mx-3"><sup>2</sup> Northwestern Polytechnical University</span>
+            </div>
+            <div class="text-gray-500 text-xs mb-8">
+                <span><sup>†</sup> Corresponding author</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#" class="flex items-center bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-gray-700 transition">
+                    <i class="fas fa-file-pdf mr-2"></i> Paper
+                </a>
+                <a href="#" class="flex items-center bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 transition">
+                    <i class="ai ai-arxiv mr-2"></i> arXiv
+                </a>
+                <a href="https://github.com/pppppsb/LoD-Locv3" class="flex items-center bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-gray-700 transition">
+                    <i class="fab fa-github mr-2"></i> Code
+                </a>
+                <a href="https://www.youtube.com/watch?v=pU2_JjncLPg" class="flex items-center bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-gray-700 transition">
+                    <i class="fab fa-youtube mr-2"></i> Video
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
+        
+        <!-- 2. Teaser Section -->
+        <section class="text-center">
+            <div class="rounded-xl overflow-hidden shadow-xl border border-gray-200">
+                <!-- Use <img> or <video autoplay loop muted playsinline> -->
+                <img src="./assets/teaser.png" 
+                     alt="Teaser Visualization" class="w-full object-cover">
+            </div>
+            <p class="mt-4 text-gray-600 text-sm md:text-base max-w-3xl mx-auto text-justify">
+                <!-- <strong>Figure 1.</strong>  -->
+        In this paper, (a) we introduce LoD-Loc v3 to address two critical challenges in aerial localization over LoD city models: cross-scene generalization and the ambiguity problem in dense urban scenes. Our solutions are twofold: (b) we construct <strong>InsLoD-Loc</strong>, a large-scale synthetic dataset covering 40 distinct areas for model zero-shot training, and (c) we reformulate the localization paradigm by shifting from semantic to instance-level silhouette alignment, which provides superior convergence.
+            </p>
+        </section>
+
+        <!-- 3. Abstract -->
+        <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-3xl font-bold mb-6 text-center">Abstract</h2>
+            <p class="text-gray-700 leading-relaxed text-justify text-lg">
+                We present LoD-Loc v3, a novel method for generalized aerial visual localization in dense urban environments.
+        While prior work LoD-Loc v2 achieves localization through semantic building silhouette alignment with low-detail city models, it suffers from two key limitations: poor cross-scene generalization and frequent failure in dense building scenes. 
+        Our method addresses these challenges through two key innovations. First, we develop a new synthetic data generation pipeline that produces <strong>InsLoD-Loc</strong> - the largest instance segmentation dataset for aerial imagery to date, comprising 100k images with precise instance-level building annotations. This enables trained models to exhibit remarkable zero-shot generalization capability. Second, we reformulate the localization paradigm by shifting from semantic to instance-level silhouette alignment, which significantly reduces pose estimation ambiguity in dense scenes.
+        Extensive experiments demonstrate that LoD-Loc v3 outperforms existing state-of-the-art (SOTA) baselines, achieving superior performance in both cross-scene and dense urban scenarios with a large margin.
+            </p>
+        </section>
+
+        <!-- 4. Demo Video -->
+        <section id="video-section">
+            <h2 class="text-3xl font-bold mb-8 text-center">Demo Video</h2>
+            
+            <!-- YouTube Embed (Recommended) -->
+            <div class="aspect-w-16 aspect-h-9 w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-lg">
+                <iframe class="w-full h-[500px]" 
+                        src="https://www.youtube.com/embed/pU2_JjncLPg" 
+                        title="LoD-Loc v3 Demo Video" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+
+
+            <!-- Local Video Fallback (Uncomment if needed) -->
+            <!-- 
+            <div class="max-w-4xl mx-auto rounded-xl overflow-hidden shadow-lg">
+                <video controls class="w-full">
+                    <source src="./video/demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div> 
+            -->
+            
+            <p class="mt-4 text-center text-gray-600">
+                Please watch the video for a detailed explanation of our pipeline and qualitative results.
+            </p>
+        </section>
+
+        <!-- 5. Overview of InsLoD-Loc -->
+        <section>
+            <h2 class="text-3xl font-bold mb-8 text-center">Overview of InsLoD-Loc</h2>
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <!-- Dataset Image -->
+                <div class="w-full">
+                    <!-- 确保你的图片 ./assets/dataset.png 已经存在 -->
+                    <img src="./assets/dataset.png" 
+                         alt="InsLoD-Loc Dataset Overview" class="rounded-lg shadow-md w-full">
+                </div>
+            </div>
+            <div class="mt-6 text-gray-700 text-lg leading-relaxed text-justify">
+                <p>
+                    <!-- <strong>Figure 2.</strong>  -->
+                    The left panel illustrates the geographic distribution of the 40 flight areas across Europe and Asia. The right panel showcases representative samples from the dataset, each displaying (from left to right): a photorealistic RGB query image and its corresponding pixel-accurate instance label, where each color represents a unique building.
+                </p>
+            </div>
+        </section>
+
+        <!-- 6. Visualization Results -->
+        <section>
+            <h2 class="text-3xl font-bold mb-8 text-center">Visualization Results</h2>
+            
+            <!-- Single Large Comparison Image -->
+            <div class="w-full mb-6">
+                <!-- 确保你的图片 ./assets/exg_loc.png 已经存在 -->
+                <img src="./assets/exg_loc.png" class="w-full rounded-lg shadow-sm" alt="Visualization Results Comparison">
+            </div>
+            
+            <!-- Caption -->
+            <p class="text-gray-700 text-lg leading-relaxed text-justify">
+                <!-- <strong>Figure 3.</strong>  -->
+                The visualized results demonstrate that our method, based on instance silhouette alignment, can effectively solve the ambiguity problem in dense urban scenes. The columns from left to right show: query image, prior pose, LoD-Loc v2 result, LoD-Loc v3 result, and the ground truth. All query images are from the Tokyo-LoDv3 dataset.
+            </p>
+        </section>
+
+        <!-- 7. BibTeX -->
+        <section class="bg-gray-100 p-8 rounded-xl">
+            <h2 class="text-2xl font-bold mb-4">BibTeX</h2>
+            <p class="mb-4 text-gray-600">If you find this work useful for your research, please cite our paper:</p>
+            <div class="relative">
+                <pre class="bg-gray-800 text-gray-200 p-4 rounded-lg overflow-x-auto font-mono text-sm">
+<code>@article{peng2026lodlocv3,
+  title={LoD-Loc v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment},
+  author={Peng, Shuaibang and Zhu, Juelin and Li, Xia and Yan, Shen and Yang, Kun and Zhang, Maojun and Liu, Yu},
+  journal={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2026}
+}</code>
+                </pre>
+                <button onclick="copyBibtex()" class="absolute top-2 right-2 bg-gray-600 hover:bg-gray-500 text-white text-xs px-2 py-1 rounded">
+                    Copy
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+        <p>
+            Website template adapted from 
+            <a href="https://nerfies.github.io" class="text-blue-500 hover:underline">Nerfies</a>.
+        </p>
+        <p class="mt-2">
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" class="text-blue-500 hover:underline">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+    </footer>
+
+    <!-- Script -->
+    <script>
+        function copyBibtex() {
+            const el = document.createElement('textarea');
+            el.value = document.querySelector('code').innerText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert('BibTeX copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

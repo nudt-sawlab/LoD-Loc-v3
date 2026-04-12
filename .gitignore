@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Runtime outputs
+logs/
+blender_realtime_temp/
+
+# Local research assets
+data/
+Ins_data/
+model/
+
+# Optional local checkpoint dirs / files
+weights/
+gloc/backbone_side/dinov2_vitb14_pretrain.pth
+gloc_roma/backbone_side/dinov2_vitb14_pretrain.pth
+
+# Temporary or duplicate experiment files
+*.log
+assets/temp

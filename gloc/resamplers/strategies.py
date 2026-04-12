@@ -1,0 +1,163 @@
+import numpy as np
+
+from gloc.utils import rotmat2qvec
+
+
+class BaseProtocol:
+    """This base dummy class serves as template for subclasses. it always returns
+    the same poses without perturbing them"""
+    def __init__(self, conf, sampler, scaler, protocol_name):
+        self.sampler = sampler
+        self.scaler = scaler
+        self.n_steps = conf.N_steps
+        self.n_views = conf.n_views
+        self.protocol = protocol_name
+        # init for later
+        self.center_std = None
+        self.max_angle = None
+        
+    def init_step(self, i):
+        self.scaler.step(i)
+        self.center_std, self.max_angle = self.scaler.get_noise()
+    
+    def get_pertubr_str(self, step, res):
+        # 计算位置标准差字符串
+        c_str = "_".join(list(map(lambda x: f'{x:.1f}'.replace('.', ','), map(float, self.center_std))))
+        # 计算最大旋转角度字符串
+        angle_str = "_".join(list(map(lambda x: f'{x:.1f}'.replace('.', ','), map(float, self.max_angle))))
+
+        # 生成扰动字符串
+        perturb_str = f'pt{self.protocol}_s{step}_sz{res}_theta{angle_str}_t{c_str}'
+        return perturb_str
+    
+    @staticmethod
+    def get_r_name(q_name, r_i, beam_i):
+        r_name = q_name+f'_{r_i}beam{beam_i}'
+        return r_name
+    
+    def resample(self, K, q_name, pred_t, pred_R, beam_i=0, *args, **kwargs):
+        # this base class returns the same pose all over again
+        render_qvecs = []
+        render_ts = []
+        calibr_pose = []
+        r_names = []
+        
+        for i in range(self.n_views):
+            t = pred_t[i]  
+            R = pred_R[i]  
+            qvec = rotmat2qvec(R) 
+
+            render_qvecs.append(qvec)
+            render_ts.append(t)
+            r_names.append(BaseProtocol.get_r_name(q_name, i, beam_i))
+            T = np.eye(4)
+            T[0:3, 0:3] = R
+            T[0:3, 3] = t
+            calibr_pose.append((T, K))
+        
+        return r_names, render_ts, render_qvecs, calibr_pose
+
+
+class Protocol1(BaseProtocol):
+    """
+    This protocol keeps only the first prediction, to perturb N times
+    """
+    def __init__(self, conf, scaler, sampler, protocol_name):
+        super().__init__(conf, scaler, sampler, protocol_name)
+    
+    # override
+    def resample(self, K, q_name, pred_t, pred_R,prior_t_beam,prior_R_beam, beam_i=0, *args, **kwargs):
+        render_qvecs = []
+        render_ts = []
+        calibr_pose = []
+        r_names = []
+        poses = []
+        t = pred_t[0]  # take first prediction
+        R = pred_R[0]  # take first prediction
+        qvec = rotmat2qvec(R) # transform to qvec
+        t_prior = prior_t_beam[0]
+        R_prior = prior_R_beam[0]
+        #### keep previous estimate #####
+        render_qvecs.append(qvec)
+        render_ts.append(t)
+        r_names.append(BaseProtocol.get_r_name(q_name, 0, beam_i))
+        T = np.eye(4)
+        T[0:3, 0:3] = R
+        T[0:3, 3] = t
+        calibr_pose.append((T, K))
+        poses.append(T)
+        ####################
+        views_per_candidate = self.n_views - 1
+        new_ts, new_qvecs, new_poses = self.sampler.sample_batch(views_per_candidate, 
+                                            self.center_std, self.max_angle, 
+                                            t, R, t_prior, R_prior)
+        render_ts += new_ts
+        render_qvecs += new_qvecs
+        for j in range(views_per_candidate):
+            r_name = BaseProtocol.get_r_name(q_name, j + 1, beam_i)            
+            r_names.append(r_name)
+            calibr_pose.append((new_poses[j], K))
+            poses.append(new_poses[j])
+
+        return r_names, render_ts, render_qvecs, calibr_pose
+
+    
+class Protocol2(BaseProtocol):
+    """  
+    This protocol keeps the first M predictions, perturbing them N // M times
+    """
+    def __init__(self, conf, scaler, sampler, protocol_name):
+        super().__init__(conf, scaler, sampler, protocol_name)
+        self.M = conf.M_candidates
+        
+    # override
+    def resample(self, K, q_name, pred_t, pred_R, beam_i=0, *args, **kwargs):
+        # K: 相机内参矩阵
+        # q_name: 查询图像名称，用于生成渲染图的唯一标识
+        # pred_t: 预测的平移向量列表 M*3
+        # pred_R: 预测的旋转矩阵列表 M*3*3
+        # beam_i: 当前 beam 的编号
+        # 其他 *args, **kwargs: 可选参数，未使用
+        render_qvecs = []
+        render_ts = []
+        calibr_pose = []
+        r_names = []
+        poses = []
+        #### keep previous first M estimates #####
+        for i in range(self.M):
+            t = pred_t[i]  
+            R = pred_R[i]  
+            
+            qvec = rotmat2qvec(R) #将3*3旋转矩阵转换为四元数
+
+            render_qvecs.append(qvec)
+            render_ts.append(t)
+            r_names.append(BaseProtocol.get_r_name(q_name, i, beam_i))
+            # (Pdb) r_names
+            # ['query_DJI_20231018092903_0016_D_0beam0'] 
+            T = np.eye(4)
+            # 把 R 和 t 组成一个 4x4 齐次变换矩阵 T，前三列前三行是旋转矩阵，最后一列前三行是平移矩阵
+            T[0:3, 0:3] = R
+            T[0:3, 3] = t
+            calibr_pose.append((T, K))
+            poses.append(T)
+        ####################
+
+        views_per_candidate = self.n_views // self.M - 1# 26/2-1
+        # breakpoint()
+        for i in range(self.M):
+            t = pred_t[i]  
+            R = pred_R[i]  
+            # t_prior = prior_t_beam[i]
+            # R_prior = prior_R_beam[i]
+            # 扰动后的平移向量、四元数、位姿
+            new_ts, new_qvecs, new_poses = self.sampler.sample_batch(views_per_candidate, self.center_std, self.max_angle, 
+                                                                     t, R)
+            render_ts += new_ts
+            render_qvecs += new_qvecs
+            for j in range(views_per_candidate):
+                r_name = BaseProtocol.get_r_name(q_name, self.M+i*views_per_candidate+j, beam_i)
+                r_names.append(r_name)
+                calibr_pose.append((new_poses[j], K))
+                poses.append(new_poses[j])
+        return r_names, render_ts, render_qvecs, calibr_pose, poses

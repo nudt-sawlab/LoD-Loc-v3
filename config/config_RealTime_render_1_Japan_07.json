@@ -1,0 +1,59 @@
+{
+    "render2loc": {
+        "dev": "phone",
+        "engine": "blender",
+        "model_ckpt": "./weights/outdoor_ds.ckpt",
+        "render_images": "images/render_upright/",
+        "datasets": "./data/temp/local_results/",
+        "query_camera": [
+            1920,
+            1080,
+            100000,
+            100000,
+            960,
+            540
+        ],
+        "render_camera_out": [
+            602,
+            448,
+            430.79748,
+            426.64093,
+            303.69349,
+            217.400193
+        ],
+        "render_camera": [
+            640,
+            360,
+            1446.6666666666666666666666666667,
+            1447,
+            320,
+            180
+        ],
+        "render_camera_in_mm": [
+            602,
+            448,
+            6.29,
+            4.71,
+            4.5,
+            56.40526,
+            1.34375
+        ],
+        "distortion": [
+            0.293656243361741,
+            -1.13028438807054,
+            0.000113131446409535,
+            5.29911015250079e-05,
+            1.24340747827876
+        ],
+        "results": "",
+        "blender": {
+            "blender_path": "blender",
+            "rgb_project_path": "./model/Japan/Japan_07/Tokeyo_Dingmu_viewpoints_topology_clustered.blend",
+            "python_rgb_path": "./utils/blender/RGB_renderer.py",
+            "origin_xml": "./data/blender_origin_zero.xml",
+            "sensor_width": 640.0,
+            "sensor_height": 360.0,
+            "f_mm": 0.0
+        }
+    }
+}

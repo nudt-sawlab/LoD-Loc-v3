@@ -1,10 +1,40 @@
-# LoD-Loc v3：基于实例轮廓对齐的密集城市无人机定位
+<p align="center">
+  <h1 align="center"><ins>LoD-Loc v3</ins>:<br>基于实例轮廓对齐的密集城市无人机定位</h1>
+  <p align="center">
+    <h>Peng&nbsp;Shuaibang</h>
+    ·
+    <h>Zhu&nbsp;Juelin</h>
+    ·
+    <h>Li&nbsp;Xia</h>
+    ·
+    <h>Yan&nbsp;Shen</h>
+    ·
+    <h>Yang&nbsp;Kun</h>
+    ·
+    <h>Zhang&nbsp;Maojun</h>
+    ·
+    <h>Liu&nbsp;Yu</h>
+  </p>
+  <h2 align="center">CVPR 2026</h2>
 
-[项目主页](https://pppppsb.github.io/LoD-Locv3/) | [English README](README.md) | [仓库地址](https://github.com/pppppsb/LoD-Locv3)
+  <h3 align="center">
+    <a href="https://pppppsb.github.io/LoD-Locv3/">项目主页</a>
+    | <a href="README.md">English README</a>
+    | <a href="https://github.com/pppppsb/LoD-Locv3/releases">Releases</a>
+  </h3>
+  <div align="center"></div>
+</p>
+<p align="center">
+    <a href="assets/teaser.png"><img src="assets/teaser.png" alt="teaser" width="100%"></a>
+    <br>
+    <em>LoD-Loc v3 通过实例轮廓对齐，面向密集城市无人机定位中的跨场景泛化与歧义问题提出解决方案。</em>
+</p>
 
-LoD-Loc v3 是一个面向低细节城市场景模型的无人机视觉定位研究代码仓库，重点关注跨场景泛化能力以及密集城市环境中的实例轮廓对齐定位。
+本仓库是论文 “LoD-Loc v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment” 的实现代码。
 
-![LoD-Loc v3 teaser](assets/teaser.png)
+## 重要说明
+
+我们非常感谢研究社区对 LoD-Loc v2 项目的关注。需要说明的是，论文中涉及的 OSG 渲染技术受到项目知识产权限制，因此本代码仓库采用了基于 Blender 的渲染流程作为替代实现。
 
 ## 仓库说明
 

@@ -1,10 +1,40 @@
-# LoD-Loc v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment
+<p align="center">
+  <h1 align="center"><ins>LoD-Loc v3</ins>:<br>Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment</h1>
+  <p align="center">
+    <h>Shuaibang&nbsp;Peng</h>
+    ·
+    <h>Juelin&nbsp;Zhu</h>
+    ·
+    <h>Xia&nbsp;Li</h>
+    ·
+    <h>Shen&nbsp;Yan</h>
+    ·
+    <h>Kun&nbsp;Yang</h>
+    ·
+    <h>Maojun&nbsp;Zhang</h>
+    ·
+    <h>Yu&nbsp;Liu</h>
+  </p>
+  <h2 align="center">CVPR 2026</h2>
 
-[Project Page](https://pppppsb.github.io/LoD-Locv3/) | [Chinese README](README_CN.md) | [Repository](https://github.com/pppppsb/LoD-Locv3)
+  <h3 align="center">
+    <a href="https://pppppsb.github.io/LoD-Locv3/">Project Page</a>
+    | <a href="README_CN.md">Chinese README</a>
+    | <a href="https://github.com/pppppsb/LoD-Locv3/releases">Releases</a>
+  </h3>
+  <div align="center"></div>
+</p>
+<p align="center">
+    <a href="assets/teaser.png"><img src="assets/teaser.png" alt="teaser" width="100%"></a>
+    <br>
+    <em>LoD-Loc v3 addresses cross-scene generalization and ambiguity in dense urban aerial localization through instance silhouette alignment.</em>
+</p>
 
-LoD-Loc v3 is a research codebase for aerial visual localization over low-detail city models, with a focus on cross-scene generalization and instance silhouette alignment in dense urban environments.
+This repository is an implementation of the paper "LoD-Loc v3: Generalized Aerial Localization in Dense Cities using Instance Silhouette Alignment".
 
-![LoD-Loc v3 teaser](assets/teaser.png)
+## Important Things
+
+We highly appreciate the research community's interest in the LoD-Loc v2 project. Please note that the OSG rendering technique described in the paper involves project intellectual property constraints. Consequently, we have implemented a Blender-based rendering pipeline as a substitute in this codebase.
 
 ## Overview
 

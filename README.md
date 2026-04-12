@@ -36,6 +36,10 @@ This repository is an implementation of the paper "LoD-Loc v3: Generalized Aeria
 
 We highly appreciate the research community's interest in the LoD-Loc v3 project. Please note that the OSG rendering technique described in the paper involves project intellectual property constraints. Consequently, we have implemented a Blender-based rendering pipeline as a substitute in this codebase.
 
+## Instance Segmentation
+
+We adopt the segmentation paradigm of [RSPrompter](https://github.com/KyanChen/RSPrompter) for our instance segmentation task. For detailed pipeline specifications, please refer to the original RSPrompter paper.
+
 ## Overview
 
 - Main public entry: `refine_blender_Japan_07.sh`

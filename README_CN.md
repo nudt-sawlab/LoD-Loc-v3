@@ -36,6 +36,10 @@
 
 我们非常感谢研究社区对 LoD-Loc v3 项目的关注。需要说明的是，论文中涉及的 OSG 渲染技术受到项目知识产权限制，因此本代码仓库采用了基于 Blender 的渲染流程作为替代实现。
 
+## 实例分割
+
+本项目的实例分割部分采用了 [RSPrompter](https://github.com/KyanChen/RSPrompter) 的分割范式。更详细的流程说明请参考原始的 RSPrompter 论文。
+
 ## 仓库说明
 
 - 当前公开主入口是 `refine_blender_Japan_07.sh`

@@ -1,4 +1,4 @@
-__all__ = ['dataset', 'get_dataset']
+﻿__all__ = ['dataset', 'get_dataset']
 
 from gloc.datasets.dataset import PoseDataset, RenderedImagesDataset
 from gloc.datasets.dataset import get_query_id, get_render_id

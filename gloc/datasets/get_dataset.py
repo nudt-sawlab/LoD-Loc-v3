@@ -18,33 +18,8 @@ def get_dataset(name, paths_conf, transform=None):
 
 def get_transform(args, colmap_dir=''):
     res = args.res
-    
-    if args.feat_model == 'Dinov2' or args.feat_model == 'Dinov2_contrast' or args.feat_model == 'DepthV2':
 
-
-        cam_file = join(colmap_dir, 'cameras.txt')
-
-
-        random_line = open(cam_file, 'r').readlines()[10].split(' ')
-        w, h = int(random_line[2]), int(random_line[3])
-
-        scale_factor = 1
-
-        patch_size = 14
-        new_h = patch_size * ((h * scale_factor) // patch_size)
-        new_w = patch_size * ((w * scale_factor) // patch_size)
-
-        new_h =  480 #int(new_h)  480 Swiss 448  Video 480 Japan_02 1080 Japan_02_one_third 360
-        new_w =  720
-
-        # import torchvision.transforms as T
-        transform = T.Compose([
-            T.ToTensor(),
-            T.Resize((new_h, new_w), antialias=True),
-            # T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])        
-
-    elif ('Aachen' not in args.name) and (colmap_dir != ''):            
+    if ('Aachen' not in args.name) and (colmap_dir != ''):
         cam_file = join(colmap_dir, 'cameras.txt')                                                                                                
         random_line = open(cam_file, 'r').readlines()[10].split(' ')
         w, h = int(random_line[2]), int(random_line[3])

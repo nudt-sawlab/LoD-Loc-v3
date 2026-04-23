@@ -1,5 +1,5 @@
-# submodules
+# Expose only the submodules required by the public pose-prior pipeline.
 from . import datasets
-from . import models
-from . import extraction
+from . import initialization
+from . import resamplers
 from . import utils

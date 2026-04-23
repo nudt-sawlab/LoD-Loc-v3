@@ -4,13 +4,11 @@ import sys
 import torch
 import numpy as np
 from tqdm import tqdm
-from torch.utils.data.dataset import Subset
-import torchvision.transforms as T
 import commons
 from parse_args import parse_args
 from path_configs import get_path_conf
 from gloc import initialization
-from gloc.datasets import get_dataset, get_transform
+from gloc.datasets import get_dataset
 from gloc.utils import utils, visualization, qvec2rotmat, rotmat2qvec
 from gloc.resamplers import get_protocol
 from configs import get_config
@@ -136,14 +134,10 @@ def main(args):
                 args.teta = main_config['teta']
             if 'gamma' in main_config:
                 args.gamma = main_config['gamma']
-            if 'feat_model' in main_config:
-                args.feat_model = main_config['feat_model']
             if 'res' in main_config:
                 args.res = main_config['res']
             if 'colmap_res' in main_config:
                 args.colmap_res = main_config['colmap_res']
-            if 'feat_level' in main_config:
-                args.feat_level = main_config['feat_level']
             
             logging.info(f"Updated args with config: beams={args.beams}, steps={args.steps}, N={args.N}, M={args.M}, protocol={args.protocol}")
             logging.info(f"Config parameters: center_std={args.center_std}, teta={args.teta}, gamma={args.gamma}")
@@ -159,16 +153,7 @@ def main(args):
     
 
     DS = args.name
-    res = args.res
-    colmap_dir = paths_conf[DS]['colmap']
-    if isinstance(colmap_dir, list):
-        colmap_dir = colmap_dir[0]
-    transform = get_transform(args, colmap_dir)
-    pose_dataset = get_dataset(DS, paths_conf[DS], transform)
-    
-
-    queries_subset = Subset(pose_dataset, pose_dataset.q_frames_idxs)
-    q_descriptors = get_query_masks(queries_subset, transform)
+    pose_dataset = get_dataset(DS, paths_conf[DS])
 
 
     fine_model = None
@@ -239,8 +224,6 @@ def main(args):
                 # w, h = 602, 448
                 # w, h = 640, 360
 
-            q_mask = q_descriptors[q_idx]
-
             query_pred_t = all_pred_t[q_idx]
             query_pred_R = all_pred_R[q_idx]
             
@@ -249,7 +232,7 @@ def main(args):
             
 
             query_scores, final_pred_t, final_pred_R, query_scores_array = process_single_query(
-                q_idx, q_name_clean, q_mask, camera_K, w, h,
+                q_idx, q_name_clean, camera_K, w, h,
                 query_pred_t, query_pred_R,
                 args, render2loc, fine_model,
                 first_step, preloaded_query_data
@@ -440,15 +423,6 @@ def clear_batch_data(batch_data):
     
     logging.info(f"批次内存清理完成: 清理了{cleared_count}个query的数据, {memory_info}")
 
-
-def get_query_masks(dataset, transform):
-    q_descriptors = []
-    for i in range(len(dataset)):
-        q_mask, _ = dataset[i]
-        q_descriptors.append(q_mask)
-    return q_descriptors
-
-
 def sort_candidates_by_score(all_scores, all_pred_t, all_pred_R):
     n_beams, N_per_beam = all_scores.shape
     
@@ -471,7 +445,7 @@ def sort_candidates_by_score(all_scores, all_pred_t, all_pred_R):
     return sorted_pred_R, sorted_pred_t, flat_preds, sorted_scores
 
 
-def process_single_query(q_idx, q_name, q_mask, camera_K, w, h, 
+def process_single_query(q_idx, q_name, camera_K, w, h,
                         initial_pred_t, initial_pred_R,
                         args, render2loc, fine_model, first_step, preloaded_query_data=None):
     
@@ -521,7 +495,7 @@ def process_single_query(q_idx, q_name, q_mask, camera_K, w, h,
         
 
         all_pred_t, all_pred_R, all_scores, step_errors = process_step_realtime(
-            q_idx, q_name, q_mask, camera_K, w, h,
+            q_idx, q_name, camera_K, w, h,
             current_pred_t, current_pred_R,
             resampler, render2loc, 
             n_beams, N_per_beam, step, args, fine_model,
@@ -566,7 +540,7 @@ def process_single_query(q_idx, q_name, q_mask, camera_K, w, h,
     return query_scores, final_pred_t, final_pred_R, final_scores_array
 
 
-def process_step_realtime(q_idx, q_name, q_mask, camera_K, w, h,
+def process_step_realtime(q_idx, q_name, camera_K, w, h,
                          pred_t, pred_R, resampler, render2loc,
                          n_beams, N_per_beam, step, args, fine_model=None,
                          q_probs=None, q_bboxs=None, q_weights=None, weight_type='area'):

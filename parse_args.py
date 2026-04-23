@@ -31,25 +31,6 @@ def parse_args():
     parser.add_argument('--clean_logs', action='store_true', help='remove renderings in the end', default=False)
     parser.add_argument('--chunk_size', type=int, help='n feats at a time', default=1100)
 
-    # model args
-    parser.add_argument('--retr_model', type=str, help='retrieval model', default='cosplace', choices=['cosplace'])
-    parser.add_argument('--ref_model', type=str, help='fine model', default='DenseFeatures', 
-                        choices=['DenseFeatures'])
-    parser.add_argument('--feat_model', type=str, help='refinement model arch', default='Roma',
-        choices=['',
-                'cosplace_r18_l1', 'cosplace_r18_l2', 'cosplace_r18_l3', 
-                 'cosplace_r50_l1', 'cosplace_r50_l2', 'cosplace_r50_l3', 
-                 'resnet18_l1', 'resnet18_l2', 'resnet18_l3',
-                 'resnet50_l1', 'resnet50_l2', 'resnet50_l3',
-                 'alexnet_l1', 'alexnet_l2', 'alexnet_l3',
-                 'Dinov2', 'Roma',
-        ])
-    
-    # fine models args
-    parser.add_argument('--clamp_score', type=float, help='thresholded scoring function', default=-1)
-    parser.add_argument('--feat_level', nargs='+', type=int, help='Level of features for ALIKED', default=[-1])
-    parser.add_argument('--scale_fmaps', type=int, help='Scale F.maps to 1/n', default=6)
-
     # path args
     parser.add_argument("--storage_dir", type=str, default='/storage/gtrivigno/vloc/renderings', help='model path')
     parser.add_argument("--fix_storage", action='store_true', default=False, help='model path')
@@ -80,12 +61,6 @@ def parse_args():
 
     # random args
     parser.add_argument('--only_step', type=int, help='iterations', default=-1)
-
-    # Pretrain model
-    parser.add_argument("--pretrain", type=str, default='/home/amax/code_render/LIB/mcloc_pure_code/data/Depthv2_maskTrain3.ckpt', help='model path')
-
-    # DepthV2 base model
-    parser.add_argument("--encoder", type=str, default='vitb', help='[vits, vitb, vitl]')
 
     # Render Config
     parser.add_argument("--render_config", type=str, default='./config/config_RealTime_render_1_in.json', help='Render Config')

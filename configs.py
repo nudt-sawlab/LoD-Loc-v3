@@ -6,15 +6,12 @@ conf = {
             'steps': 40,
             'N': 52,
             'M': 2,
-            'feat_model': 'DepthV2',
             'protocol': '2_1',
             'center_std': [1.5,1.5, 1.5],
             'teta': [2],
             'gamma': 0.3,
             'res': 320,
             'colmap_res': 320,
-            'feat_level' : [8],
-            'foundation_model_path': 'ckpt/dinov2_vitb14_pretrain.pth',
         },      
     ]
 }
